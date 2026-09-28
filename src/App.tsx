@@ -51,8 +51,8 @@ export default function App() {
             document.title = matched.pageTitle;
             return;
           }
-        } else if (pathname.startsWith('/tour/')) {
-          const pathSlug = pathname.replace('/tour/', '').replace(/\/$/, '');
+        } else if (pathname.includes('/tour/')) {
+          const pathSlug = pathname.split('/tour/')[1]?.replace(/\/.*$/, '');
           const matched = TOUR_PACKAGES.find(t => t.slug === pathSlug);
           if (matched) {
             setActiveTourSlug(matched.slug);
