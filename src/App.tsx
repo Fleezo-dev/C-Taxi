@@ -149,7 +149,7 @@ export default function App() {
 
   const handleBackToHome = () => {
     setActiveTourSlug(null);
-    document.title = 'C Taxi Coimbatore – 24/7 Call Taxi, Airport Transfer & Outstation Cabs';
+    document.title = 'C Taxi – 24/7 Call Taxi, Airport Transfer & Outstation Cabs';
     window.history.pushState({}, '', window.location.pathname);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

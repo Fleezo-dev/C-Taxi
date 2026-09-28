@@ -52,7 +52,7 @@ export const TourDetailPage: React.FC<TourDetailPageProps> = ({
     'Premium Innova Crysta (7-Seater VIP)';
 
   const formattedWhatsAppText = encodeURIComponent(
-    `Hello C Taxi Coimbatore,\nI would like to book the tour package:\n` +
+    `Hello C Taxi,\nI would like to book the tour package:\n` +
     `• Tour: ${tour.title}\n` +
     `• Vehicle: ${vehicleName}\n` +
     `• Date: ${travelDate}\n` +

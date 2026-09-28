@@ -29,7 +29,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, boo
   };
 
   const formattedWhatsAppText = encodeURIComponent(
-    `Hello C Taxi Coimbatore,\nI have submitted an instant booking request:\n` +
+    `Hello C Taxi,\nI have submitted an instant booking request:\n` +
     `• Name: ${customerName || 'Customer'}\n` +
     `• Phone: ${customerPhone}\n` +
     `• Pickup: ${pickupAddress || bookingDetails?.pickup || 'Coimbatore'}\n` +

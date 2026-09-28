@@ -19,7 +19,7 @@ export const FaqSection: React.FC = () => {
             Got Questions? We Have Answers
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white font-heading tracking-tight" style={{ textWrap: 'balance' }}>
-            Frequently Asked Questions About C Taxi Coimbatore
+            Frequently Asked Questions About C Taxi
           </h2>
           <p className="text-neutral-400 text-sm sm:text-base max-w-2xl mx-auto">
             Everything you need to know about our one-way drop policies, outstation packages, and airport pickup guarantees.

@@ -151,7 +151,7 @@ export const FareCalculator: React.FC<FareCalculatorProps> = ({
 
   // Pre-fill WhatsApp message
   const whatsappMessage = encodeURIComponent(
-    `Hello C Taxi Coimbatore,\nI would like to book a cab:\n` +
+    `Hello C Taxi,\nI would like to book a cab:\n` +
     `• Service: ${activeTab === 'local' ? 'Local City Ride' : activeTab === 'outstation' ? 'Outstation Trip' : activeTab === 'hourly' ? 'Hourly Rental' : 'Airport Transfer'}\n` +
     `• Pickup: ${activeTab === 'airport' && airportTripType === 'from_airport' ? 'CJB Airport Terminal' : (activeTab === 'airport' ? airportCityLocality : (activeTab === 'local' ? localPickup : 'Coimbatore'))}\n` +
     `• Drop: ${activeTab === 'airport' && airportTripType === 'from_airport' ? airportCityLocality : (activeTab === 'airport' ? 'CJB Airport Terminal' : (activeTab === 'hourly' ? `${rentalHours} Hours Rental` : (activeTab === 'local' ? localDrop : activeDest.name)))}\n` +

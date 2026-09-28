@@ -34,7 +34,7 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
             </span>
             <div>
               <h3 className="text-base font-bold text-white font-heading">
-                C Taxi Coimbatore — Legal & Policies
+                C Taxi — Legal & Policies
               </h3>
               <p className="text-[11px] text-neutral-400">
                 Google Ads Compliant & Transparent Terms
@@ -102,7 +102,7 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
             <div className="space-y-4">
               <div className="flex items-center gap-2 text-amber-400 font-bold text-base">
                 <Shield className="w-5 h-5" />
-                <h4>Privacy Policy — C Taxi Coimbatore</h4>
+                <h4>Privacy Policy — C Taxi</h4>
               </div>
               <p className="text-xs text-neutral-400">
                 Last updated: September 2026. Effective for all C Taxi rides booked via phone, WhatsApp, or website.

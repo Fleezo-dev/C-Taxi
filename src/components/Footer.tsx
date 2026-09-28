@@ -21,7 +21,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPolicy }) => {
                 C
               </span>
               <span className="font-heading font-extrabold text-xl text-white tracking-tight">
-                C Taxi Coimbatore
+                C Taxi
               </span>
             </div>
             <p className="text-neutral-400 leading-relaxed text-xs">
@@ -174,7 +174,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPolicy }) => {
         {/* Bottom copyright & attribution */}
         <div className="pt-8 border-t border-neutral-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-neutral-400">
           <div>
-            © {new Date().getFullYear()} C Taxi Coimbatore. All rights reserved.
+            © {new Date().getFullYear()} C Taxi. All rights reserved.
           </div>
           <div className="flex items-center gap-4 flex-wrap">
             <button

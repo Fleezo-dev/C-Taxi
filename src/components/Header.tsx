@@ -15,7 +15,7 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
         <a 
           href="/" 
           className="flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-md py-1"
-          aria-label="C Taxi Coimbatore Home"
+          aria-label="C Taxi Home"
         >
           <span className="w-10 h-10 rounded-lg bg-amber-400 text-neutral-950 font-extrabold text-2xl flex items-center justify-center font-heading shadow-md shadow-amber-400/20 group-hover:scale-105 transition-transform">
             C
@@ -23,12 +23,9 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
           <div className="flex flex-col">
             <span className="font-heading font-extrabold text-2xl tracking-tight text-white flex items-center gap-1.5 leading-none">
               C Taxi
-              <span className="text-xs font-semibold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20">
-                Coimbatore
-              </span>
             </span>
             <span className="text-[11px] text-neutral-400 tracking-wide mt-1 flex items-center gap-1">
-              <Clock className="w-3 h-3 text-emerald-400" /> 24/7 Kovai Call Taxi
+              <Clock className="w-3 h-3 text-emerald-400" /> 24/7 Call Taxi Service
             </span>
           </div>
         </a>
