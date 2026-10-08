@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface HeaderProps {
   onOpenPage: (pageKey: string) => void;
-  onOpenDiscount: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onOpenPage, onOpenDiscount }) => {
+export const Header: React.FC<HeaderProps> = ({ onOpenPage }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -22,6 +21,23 @@ export const Header: React.FC<HeaderProps> = ({ onOpenPage, onOpenDiscount }) =>
       setMobileMenuOpen(false);
     }
   };
+
+  // Close drawer on ESC key and prevent body scroll
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
+    };
+    if (mobileMenuOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   return (
     <>
@@ -59,9 +75,9 @@ export const Header: React.FC<HeaderProps> = ({ onOpenPage, onOpenDiscount }) =>
             </div>
           </a>
 
-          {/* Desktop Navigation */}
-          <nav>
-            <ul className="main-menu" style={{ display: 'flex', alignItems: 'center', gap: '20px', listStyle: 'none', margin: 0, padding: 0 }}>
+          {/* Desktop Navigation (Hidden on mobile/tablet <= 1100px) */}
+          <nav className="desktop-nav-wrap">
+            <ul className="main-menu">
               <li>
                 <a href="#booking-form-section" onClick={(e) => handleNavClick(e, '#booking-form-section')} className="active">
                   Book Ride
@@ -70,8 +86,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenPage, onOpenDiscount }) =>
               <li>
                 <button
                   type="button"
+                  className="nav-link-btn"
                   onClick={() => onOpenPage('tour-packages')}
-                  style={{ background: 'none', border: 'none', color: 'inherit', font: 'inherit', cursor: 'pointer', padding: 0 }}
                 >
                   Tour Packages
                 </button>
@@ -89,8 +105,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenPage, onOpenDiscount }) =>
               <li>
                 <button
                   type="button"
+                  className="nav-link-btn"
                   onClick={() => onOpenPage('tariff')}
-                  style={{ background: 'none', border: 'none', color: 'inherit', font: 'inherit', cursor: 'pointer', padding: 0 }}
                 >
                   Tariff Card
                 </button>
@@ -113,16 +129,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenPage, onOpenDiscount }) =>
             </ul>
           </nav>
 
-          {/* Header Action Buttons */}
-          <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <button
-              type="button"
-              onClick={onOpenDiscount}
-              className="btn btn-yellow"
-              style={{ fontSize: '0.85rem', padding: '8px 14px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '5px' }}
-            >
-              🎁 <span>Discount Wheel</span>
-            </button>
+          {/* Header Action Buttons (Call + Hamburger Menu on Mobile) */}
+          <div className="header-actions">
             <a
               href="tel:+919089223344"
               className="btn btn-red call-btn-head"
@@ -130,99 +138,183 @@ export const Header: React.FC<HeaderProps> = ({ onOpenPage, onOpenDiscount }) =>
             >
               📞 <span>9089223344</span>
             </a>
-            {/* Mobile Hamburger Toggle */}
+
+            {/* Mobile Hamburger Toggle Button */}
             <button
               type="button"
-              className="mobile-nav-toggle"
+              className="mobile-toggle"
               onClick={toggleMobileMenu}
-              aria-label="Toggle navigation menu"
-              style={{ display: 'none' }}
+              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={mobileMenuOpen}
             >
-              {mobileMenuOpen ? '✕' : '☰'}
+              {mobileMenuOpen ? (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              ) : (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <line x1="3" y1="12" x2="21" y2="12"></line>
+                  <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+              )}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer Overlay */}
       {mobileMenuOpen && (
         <div className="mobile-drawer-backdrop" onClick={() => setMobileMenuOpen(false)}>
           <div className="mobile-drawer-content" onClick={(e) => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--brand-red)' }}>C TAXI</span>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Ctaxi.co.in</span>
+            <div className="drawer-header">
+              <div className="drawer-brand">
+                <span className="drawer-brand-name">
+                  C <span style={{ color: 'var(--brand-yellow)' }}>TAXI</span>
+                </span>
+                <span className="drawer-brand-domain">Ctaxi.co.in • 24/7 Service</span>
               </div>
               <button
                 type="button"
+                className="drawer-close-btn"
                 onClick={() => setMobileMenuOpen(false)}
-                style={{ background: 'none', border: 'none', fontSize: '1.4rem', cursor: 'pointer' }}
+                aria-label="Close menu"
               >
-                ✕
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
               </button>
             </div>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              <li>
-                <a href="#booking-form-section" onClick={(e) => handleNavClick(e, '#booking-form-section')} style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--brand-dark)', textDecoration: 'none' }}>
-                  🚖 Book a Ride
-                </a>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => { onOpenPage('tour-packages'); setMobileMenuOpen(false); }}
-                  style={{ background: 'none', border: 'none', fontSize: '1.1rem', fontWeight: 700, color: 'var(--brand-dark)', cursor: 'pointer', textAlign: 'left', padding: 0 }}
-                >
-                  🏖️ Tour Packages
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => { onOpenPage('tariff'); setMobileMenuOpen(false); }}
-                  style={{ background: 'none', border: 'none', fontSize: '1.1rem', fontWeight: 700, color: 'var(--brand-dark)', cursor: 'pointer', textAlign: 'left', padding: 0 }}
-                >
-                  📑 Official Tariff Card
-                </button>
-              </li>
-              <li>
-                <a href="#routes" onClick={(e) => handleNavClick(e, '#routes')} style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--brand-dark)', textDecoration: 'none' }}>
-                  🛣️ Outstation Routes
-                </a>
-              </li>
-              <li>
-                <a href="#blogs" onClick={(e) => handleNavClick(e, '#blogs')} style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--brand-dark)', textDecoration: 'none' }}>
-                  📰 Travel Guides & Blogs
-                </a>
-              </li>
-              <li>
-                <a href="#why-choose" onClick={(e) => handleNavClick(e, '#why-choose')} style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--brand-dark)', textDecoration: 'none' }}>
-                  ⭐ Why Choose C Taxi
-                </a>
-              </li>
-              <li>
-                <a href="#faq" onClick={(e) => handleNavClick(e, '#faq')} style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--brand-dark)', textDecoration: 'none' }}>
-                  ❓ FAQ
-                </a>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => { onOpenDiscount(); setMobileMenuOpen(false); }}
-                  style={{ background: 'none', border: 'none', fontSize: '1.1rem', fontWeight: 700, color: 'var(--brand-red)', cursor: 'pointer', textAlign: 'left', padding: 0 }}
-                >
-                  🎁 Spin & Win Ride Discount
-                </button>
-              </li>
-            </ul>
 
-            <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <a href="tel:+919089223344" className="btn btn-red" style={{ textAlign: 'center', textDecoration: 'none', fontWeight: 700 }}>
-                📞 Call Now: 9089223344
-              </a>
-              <a href="https://wa.me/919089223344?text=Hello%20C%20Taxi%2C%20I%20would%20like%20to%20book%20a%20cab%20in%20Coimbatore" target="_blank" rel="noopener noreferrer" className="btn" style={{ background: '#25D366', color: '#fff', textAlign: 'center', textDecoration: 'none', fontWeight: 700 }}>
-                💬 Chat on WhatsApp
-              </a>
+            <div className="drawer-body">
+              <div className="drawer-section-label">MAIN NAVIGATION</div>
+              <ul className="drawer-nav-list">
+                <li>
+                  <a
+                    href="#booking-form-section"
+                    onClick={(e) => handleNavClick(e, '#booking-form-section')}
+                    className="drawer-nav-item"
+                  >
+                    <span className="drawer-item-icon">🚖</span>
+                    <span className="drawer-item-text">Book a Ride / Estimate</span>
+                    <span className="drawer-item-badge">Instant</span>
+                  </a>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => { onOpenPage('tour-packages'); setMobileMenuOpen(false); }}
+                    className="drawer-nav-item"
+                  >
+                    <span className="drawer-item-icon">🏖️</span>
+                    <span className="drawer-item-text">Tour Packages</span>
+                    <span className="drawer-item-badge">10 Tours</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => { onOpenPage('tariff'); setMobileMenuOpen(false); }}
+                    className="drawer-nav-item"
+                  >
+                    <span className="drawer-item-icon">📑</span>
+                    <span className="drawer-item-text">Official Tariff Card</span>
+                    <span className="drawer-item-badge">Zero Surge</span>
+                  </button>
+                </li>
+                <li>
+                  <a
+                    href="#routes"
+                    onClick={(e) => handleNavClick(e, '#routes')}
+                    className="drawer-nav-item"
+                  >
+                    <span className="drawer-item-icon">🛣️</span>
+                    <span className="drawer-item-text">Intercity Routes</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#blogs"
+                    onClick={(e) => handleNavClick(e, '#blogs')}
+                    className="drawer-nav-item"
+                  >
+                    <span className="drawer-item-icon">📰</span>
+                    <span className="drawer-item-text">Travel Guides & Blogs</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#why-choose"
+                    onClick={(e) => handleNavClick(e, '#why-choose')}
+                    className="drawer-nav-item"
+                  >
+                    <span className="drawer-item-icon">⭐</span>
+                    <span className="drawer-item-text">Why Choose C Taxi</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#services"
+                    onClick={(e) => handleNavClick(e, '#services')}
+                    className="drawer-nav-item"
+                  >
+                    <span className="drawer-item-icon">🚗</span>
+                    <span className="drawer-item-text">Our Taxi Services</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#coimbatore-info"
+                    onClick={(e) => handleNavClick(e, '#coimbatore-info')}
+                    className="drawer-nav-item"
+                  >
+                    <span className="drawer-item-icon">📍</span>
+                    <span className="drawer-item-text">Coimbatore City Hubs</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#faq"
+                    onClick={(e) => handleNavClick(e, '#faq')}
+                    className="drawer-nav-item"
+                  >
+                    <span className="drawer-item-icon">❓</span>
+                    <span className="drawer-item-text">Frequently Asked Questions</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#contact"
+                    onClick={(e) => handleNavClick(e, '#contact')}
+                    className="drawer-nav-item"
+                  >
+                    <span className="drawer-item-icon">📞</span>
+                    <span className="drawer-item-text">Contact C Taxi</span>
+                  </a>
+                </li>
+              </ul>
+
+              <div className="drawer-cta-wrap">
+                <a
+                  href="tel:+919089223344"
+                  className="btn btn-red drawer-call-btn"
+                >
+                  📞 Call Now: 9089223344
+                </a>
+                <a
+                  href="https://wa.me/919089223344?text=Hello%20C%20Taxi%2C%20I%20would%20like%20to%20book%20a%20cab%20in%20Coimbatore"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn drawer-whatsapp-btn"
+                >
+                  💬 Chat on WhatsApp
+                </a>
+                <div className="drawer-trust-note">
+                  ⚡ 24/7 Dispatch across Gandhipuram, Peelamedu & CJB Airport
+                </div>
+              </div>
             </div>
           </div>
         </div>

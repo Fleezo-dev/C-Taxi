@@ -20,7 +20,6 @@ import { CallBanner } from './components/CallBanner';
 import { Footer } from './components/Footer';
 import { DedicatedModal } from './components/DedicatedModal';
 import { ReservationModal } from './components/ReservationModal';
-import { DiscountModal } from './components/DiscountModal';
 import { BottomDock } from './components/BottomDock';
 
 export default function App() {
@@ -31,9 +30,6 @@ export default function App() {
 
   // Booking Reservation Modal
   const [activeBookingData, setActiveBookingData] = useState<BookingSubmission | null>(null);
-
-  // Spin & Win Discount Modal
-  const [isDiscountOpen, setIsDiscountOpen] = useState(false);
 
   // Deep-link handling via search params
   useEffect(() => {
@@ -120,7 +116,6 @@ export default function App() {
       {/* 1. Header Navigation */}
       <Header
         onOpenPage={handleOpenPage}
-        onOpenDiscount={() => setIsDiscountOpen(true)}
       />
 
       {/* 2. Hero Section with Live Highway Canvas & 4-Tab Booking Form */}
@@ -184,12 +179,6 @@ export default function App() {
       <ReservationModal
         bookingData={activeBookingData}
         onClose={() => setActiveBookingData(null)}
-      />
-
-      {/* 18. Spin & Win Discount Modal */}
-      <DiscountModal
-        isOpen={isDiscountOpen}
-        onClose={() => setIsDiscountOpen(false)}
       />
     </div>
   );
