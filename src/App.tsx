@@ -5,253 +5,192 @@
 
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
-import { CampaignBanner } from './components/CampaignBanner';
-import { Hero } from './components/Hero';
-import { FareCalculator } from './components/FareCalculator';
-import { HomeToursSection } from './components/HomeToursSection';
-import { TourDetailPage } from './components/TourDetailPage';
+import { HeroBookingSection, BookingSubmission } from './components/HeroBookingSection';
+import { QuickTrustStrip } from './components/QuickTrustStrip';
+import { RoutesSection } from './components/RoutesSection';
+import { FeaturesSection } from './components/FeaturesSection';
+import { TaxiComparisonSection } from './components/TaxiComparisonSection';
 import { ServicesSection } from './components/ServicesSection';
-import { PopularRoutesSection } from './components/PopularRoutesSection';
-import { FleetSection } from './components/FleetSection';
-import { TrustProofSection } from './components/TrustProofSection';
+import { CoimbatoreInfoSection } from './components/CoimbatoreInfoSection';
+import { ReviewsSection } from './components/ReviewsSection';
+import { TourPackagesSection } from './components/TourPackagesSection';
+import { BlogsSection } from './components/BlogsSection';
 import { FaqSection } from './components/FaqSection';
+import { CallBanner } from './components/CallBanner';
 import { Footer } from './components/Footer';
-import { StickyBottomCta } from './components/StickyBottomCta';
-import { BookingModal } from './components/BookingModal';
-import { PolicyModal, PolicyType } from './components/PolicyModal';
-import { AD_CAMPAIGN_PRESETS } from './data/taxiData';
-import { TOUR_PACKAGES, TourPackage } from './data/toursData';
+import { DedicatedModal } from './components/DedicatedModal';
+import { ReservationModal } from './components/ReservationModal';
+import { DiscountModal } from './components/DiscountModal';
+import { BottomDock } from './components/BottomDock';
 
 export default function App() {
-  const [currentCampaignId, setCurrentCampaignId] = useState<string>('local');
-  const [activeServiceKey, setActiveServiceKey] = useState<string>('local');
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState<boolean>(false);
-  const [bookingDetails, setBookingDetails] = useState<any>(null);
+  // Modal states
+  const [activePageKey, setActivePageKey] = useState<string | null>(null);
+  const [activePackageKey, setActivePackageKey] = useState<string | null>(null);
+  const [activeBlogKey, setActiveBlogKey] = useState<string | null>(null);
 
-  // Active Tour Page state for dedicated sitelinks
-  const [activeTourSlug, setActiveTourSlug] = useState<string | null>(null);
+  // Booking Reservation Modal
+  const [activeBookingData, setActiveBookingData] = useState<BookingSubmission | null>(null);
 
-  // Policy Modal state for Privacy Policy, Cancellation & Refund, Terms
-  const [isPolicyModalOpen, setIsPolicyModalOpen] = useState<boolean>(false);
-  const [activePolicyType, setActivePolicyType] = useState<PolicyType>('privacy');
+  // Spin & Win Discount Modal
+  const [isDiscountOpen, setIsDiscountOpen] = useState(false);
 
-  // Sync URL search parameters and path on initial load & popstate
+  // Deep-link handling via search params
   useEffect(() => {
-    const parseUrl = () => {
+    const handleUrl = () => {
       try {
         const params = new URLSearchParams(window.location.search);
-        const tourParam = params.get('tour');
-        const pathname = window.location.pathname;
+        const pkgParam = params.get('package') || params.get('tour');
+        const blogParam = params.get('blog') || params.get('article');
+        const pageParam = params.get('page');
 
-        // Check if landing directly on a tour sitelink
-        if (tourParam) {
-          const matched = TOUR_PACKAGES.find(t => t.slug === tourParam);
-          if (matched) {
-            setActiveTourSlug(matched.slug);
-            document.title = matched.pageTitle;
-            return;
-          }
-        } else if (pathname.includes('/tour/')) {
-          const pathSlug = pathname.split('/tour/')[1]?.replace(/\/.*$/, '');
-          const matched = TOUR_PACKAGES.find(t => t.slug === pathSlug);
-          if (matched) {
-            setActiveTourSlug(matched.slug);
-            document.title = matched.pageTitle;
-            return;
-          }
-        }
-
-        // Campaign intent matching for Home page
-        const campaignParam = params.get('campaign') || params.get('utm_campaign') || params.get('service');
-        const termParam = params.get('utm_term') || params.get('q');
-
-        if (campaignParam) {
-          const found = AD_CAMPAIGN_PRESETS.find(p => 
-            p.id.toLowerCase() === campaignParam.toLowerCase() ||
-            p.primaryTab.toLowerCase() === campaignParam.toLowerCase()
-          );
-          if (found) {
-            setCurrentCampaignId(found.id);
-            setActiveServiceKey(found.primaryTab);
-            return;
-          }
-        }
-
-        if (termParam) {
-          const lower = termParam.toLowerCase();
-          if (lower.includes('airport') || lower.includes('flight') || lower.includes('cjb')) {
-            setCurrentCampaignId('airport');
-            setActiveServiceKey('airport');
-          } else if (lower.includes('ooty') || lower.includes('coonoor') || lower.includes('hill') || lower.includes('valparai') || lower.includes('outstation')) {
-            setCurrentCampaignId('outstation');
-            setActiveServiceKey('outstation');
-          } else if (lower.includes('hourly') || lower.includes('rental') || lower.includes('day package')) {
-            setCurrentCampaignId('hourly');
-            setActiveServiceKey('hourly');
-          } else {
-            setCurrentCampaignId('local');
-            setActiveServiceKey('local');
-          }
+        if (pkgParam) {
+          setActivePackageKey(pkgParam);
+          setActiveBlogKey(null);
+          setActivePageKey(null);
+        } else if (blogParam) {
+          setActiveBlogKey(blogParam);
+          setActivePackageKey(null);
+          setActivePageKey(null);
+        } else if (pageParam) {
+          setActivePageKey(pageParam);
+          setActivePackageKey(null);
+          setActiveBlogKey(null);
         }
       } catch {
-        // Ignore URL parsing errors
+        // safe fallback
       }
     };
 
-    parseUrl();
-    window.addEventListener('popstate', parseUrl);
-    return () => window.removeEventListener('popstate', parseUrl);
+    handleUrl();
+    window.addEventListener('popstate', handleUrl);
+    return () => window.removeEventListener('popstate', handleUrl);
   }, []);
 
-  const handleSelectCampaign = (id: string) => {
-    setCurrentCampaignId(id);
-    const preset = AD_CAMPAIGN_PRESETS.find(p => p.id === id);
-    if (preset) {
-      setActiveServiceKey(preset.primaryTab);
-    }
+  const handleOpenPage = (pageKey: string) => {
+    setActivePageKey(pageKey);
+    setActivePackageKey(null);
+    setActiveBlogKey(null);
+    window.history.pushState({}, '', `?page=${pageKey}`);
   };
 
-  const handleSelectService = (serviceKey: string) => {
-    setActiveServiceKey(serviceKey);
+  const handleSelectPackage = (packageKey: string) => {
+    setActivePackageKey(packageKey);
+    setActivePageKey(null);
+    setActiveBlogKey(null);
+    window.history.pushState({}, '', `?package=${packageKey}`);
   };
 
-  const handleSelectRoute = (route: any) => {
-    if (route.category === 'airport') {
-      setActiveServiceKey('airport');
-    } else {
-      setActiveServiceKey('outstation');
-    }
+  const handleSelectBlog = (blogKey: string) => {
+    setActiveBlogKey(blogKey);
+    setActivePageKey(null);
+    setActivePackageKey(null);
+    window.history.pushState({}, '', `?blog=${blogKey}`);
   };
 
-  const handleSelectFleet = (vehicleId: string) => {
-    // Navigates user to calculator
-  };
-
-  const handleOpenBookingModal = (details: any) => {
-    setBookingDetails(details);
-    setIsBookingModalOpen(true);
-  };
-
-  const handleOpenPolicy = (type: PolicyType) => {
-    setActivePolicyType(type);
-    setIsPolicyModalOpen(true);
-  };
-
-  const handleNavigateToTour = (slug: string) => {
-    const matched = TOUR_PACKAGES.find(t => t.slug === slug);
-    if (matched) {
-      setActiveTourSlug(slug);
-      document.title = matched.pageTitle;
-      window.history.pushState({}, '', `?tour=${slug}`);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
-  const handleBackToHome = () => {
-    setActiveTourSlug(null);
-    document.title = 'C Taxi – 24/7 Call Taxi, Airport Transfer & Outstation Cabs';
+  const handleCloseModal = () => {
+    setActivePageKey(null);
+    setActivePackageKey(null);
+    setActiveBlogKey(null);
     window.history.pushState({}, '', window.location.pathname);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleBookTourFromCard = (tour: TourPackage) => {
-    handleOpenBookingModal({
+  const handleBookFromHero = (data: BookingSubmission) => {
+    setActiveBookingData(data);
+  };
+
+  const handleBookFromTour = (title: string, price: string) => {
+    handleCloseModal();
+    const el = document.getElementById('booking-form-section');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    setActiveBookingData({
       serviceType: 'outstation',
       pickup: 'Coimbatore City (Doorstep)',
-      drop: tour.title,
-      vehicle: 'Prime AC Sedan',
-      estimatedPrice: tour.startingPrice,
-      date: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-      time: '06:30 AM',
-      breakdownNote: `${tour.duration} Package: ${tour.routeOverview}`
+      drop: title,
+      dateTime: new Date(Date.now() + 86400000).toISOString().slice(0, 16),
+      phone: '',
+      vehicle: 'Sedan (Dzire / Etios)',
+      fareEstimate: price,
+      extraInfo: `Tour Package: ${title}`
     });
   };
 
-  const activeTour = TOUR_PACKAGES.find(t => t.slug === activeTourSlug);
-
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col font-sans selection:bg-amber-400 selection:text-neutral-950">
-      
-      {/* Top Navigation Bar with strict 3-zone contract */}
-      <Header onBookClick={() => setIsBookingModalOpen(true)} />
-
-      {activeTour ? (
-        /* Dedicated Standalone Tour Landing Page for Google Campaign Sitelinks */
-        <main className="flex-1">
-          <TourDetailPage
-            tour={activeTour}
-            onBackToHome={handleBackToHome}
-            onNavigateToTour={handleNavigateToTour}
-            onOpenBookingModal={handleOpenBookingModal}
-          />
-        </main>
-      ) : (
-        /* Main Home Conversion Flow */
-        <>
-          {/* Google Ads Dynamic Keyword Scent & Campaign Matcher Bar */}
-          <CampaignBanner
-            currentCampaignId={currentCampaignId}
-            onSelectCampaign={handleSelectCampaign}
-          />
-
-          <main className="flex-1">
-            {/* Hero Section with Dynamic Headline & Value Proposition */}
-            <Hero
-              currentCampaignId={currentCampaignId}
-              onOpenBookingModal={handleOpenBookingModal}
-            />
-
-            {/* Live Fare Calculator: 1. Local Rides -> 2. Outstation -> 3. Hourly Rentals -> 4. Airport */}
-            <FareCalculator
-              initialService={activeServiceKey}
-              onOpenBookingModal={handleOpenBookingModal}
-            />
-
-            {/* Featured Sightseeing & Tour Packages: Top 3 (Ooty-Coonoor-Kotagiri, Marudhamalai-Isha, Palani) + Sitelinks */}
-            <HomeToursSection
-              onNavigateToTour={handleNavigateToTour}
-              onBookTour={handleBookTourFromCard}
-            />
-
-            {/* Core Mobility Services Bento Grid */}
-            <ServicesSection onSelectService={handleSelectService} />
-
-            {/* Popular Outstation & Airport Routes with Starting Rates (Ooty from 3000) */}
-            <PopularRoutesSection onSelectRoute={handleSelectRoute} />
-
-            {/* Clean Fleet Specifications & Rate Card (No Hatchback) */}
-            <FleetSection onSelectFleet={handleSelectFleet} />
-
-            {/* Coimbatore Localities Coverage, Guarantees & Verified Testimonials */}
-            <TrustProofSection />
-
-            {/* High-Intent FAQ Section (Objection Killers) */}
-            <FaqSection />
-          </main>
-        </>
-      )}
-
-      {/* Clean Quiet Footer with Google Ads Compliant Legal Links */}
-      <Footer onOpenPolicy={handleOpenPolicy} />
-
-      {/* High-Conversion Sticky Bottom Conversion Bar (Mobile & Web Friendly) */}
-      <StickyBottomCta onOpenBookingModal={handleOpenBookingModal} />
-
-      {/* Fast Booking Modal */}
-      <BookingModal
-        isOpen={isBookingModalOpen}
-        onClose={() => setIsBookingModalOpen(false)}
-        bookingDetails={bookingDetails}
+    <div className="ctaxi-app-root">
+      {/* 1. Header Navigation */}
+      <Header
+        onOpenPage={handleOpenPage}
+        onOpenDiscount={() => setIsDiscountOpen(true)}
       />
 
-      {/* Privacy Policy, Cancellation & Refund, and Terms Modal */}
-      <PolicyModal
-        isOpen={isPolicyModalOpen}
-        onClose={() => setIsPolicyModalOpen(false)}
-        activePolicy={activePolicyType}
-        onChangePolicy={setActivePolicyType}
+      {/* 2. Hero Section with Live Highway Canvas & 4-Tab Booking Form */}
+      <HeroBookingSection onBook={handleBookFromHero} />
+
+      {/* 3. Quick Trust Strip */}
+      <QuickTrustStrip />
+
+      {/* 4. Popular Intercity Routes Grid */}
+      <RoutesSection
+        onOpenTariff={() => handleOpenPage('tariff')}
       />
 
+      {/* 5. Why C Taxi / Features Grid */}
+      <FeaturesSection />
+
+      {/* 6. Transparency Comparison Table */}
+      <TaxiComparisonSection />
+
+      {/* 7. Complete Taxi Solutions / Services */}
+      <ServicesSection />
+
+      {/* 8. Coimbatore Coverage & Local Hubs */}
+      <CoimbatoreInfoSection />
+
+      {/* 9. Rider Testimonials */}
+      <ReviewsSection />
+
+      {/* 10. Popular Tour Packages from Coimbatore */}
+      <TourPackagesSection
+        onSelectPackage={handleSelectPackage}
+      />
+
+      {/* 11. Travel Guides & Blogs */}
+      <BlogsSection
+        onSelectBlog={handleSelectBlog}
+      />
+
+      {/* 12. FAQ Accordion */}
+      <FaqSection />
+
+      {/* 13. Call & WhatsApp Instant Action Banner */}
+      <CallBanner />
+
+      {/* 14. 4-Column Footer */}
+      <Footer onOpenPage={handleOpenPage} />
+
+      {/* 15. Mobile Sticky Bottom App Dock */}
+      <BottomDock />
+
+      {/* 16. Dedicated Sub-Page Modal (Tours / Blogs / Tariffs / Policies) */}
+      <DedicatedModal
+        pageKey={activePageKey}
+        packageKey={activePackageKey}
+        blogKey={activeBlogKey}
+        onClose={handleCloseModal}
+        onBookPackage={handleBookFromTour}
+      />
+
+      {/* 17. Booking Reservation Received Modal */}
+      <ReservationModal
+        bookingData={activeBookingData}
+        onClose={() => setActiveBookingData(null)}
+      />
+
+      {/* 18. Spin & Win Discount Modal */}
+      <DiscountModal
+        isOpen={isDiscountOpen}
+        onClose={() => setIsDiscountOpen(false)}
+      />
     </div>
   );
 }

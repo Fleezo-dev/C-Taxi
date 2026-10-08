@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, MessageSquare, Clock, Car, Sparkles, MapPin } from 'lucide-react';
+import { Phone, MessageSquare, Sparkles } from 'lucide-react';
 import { PHONE_NUMBER, DISPLAY_PHONE, WHATSAPP_URL } from '../data/taxiData';
 
 interface StickyBottomCtaProps {
@@ -19,7 +19,7 @@ export const StickyBottomCta: React.FC<StickyBottomCtaProps> = ({ onOpenBookingM
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-neutral-950/95 backdrop-blur-md border-t border-neutral-800 shadow-2xl safe-area-pb">
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#0d0f12]/95 backdrop-blur-md border-t border-[#232936] shadow-2xl safe-area-pb">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-2.5">
         
         {/* Mobile View (< 768px) - High Thumb Ergonomics within 15% Viewport */}
@@ -47,12 +47,12 @@ export const StickyBottomCta: React.FC<StickyBottomCtaProps> = ({ onOpenBookingM
           </a>
         </div>
 
-        {/* Desktop / Web Friendly View (>= 768px) - Full Conversion Control Bar */}
+        {/* Desktop / Web Friendly View (>= 768px) */}
         <div className="hidden md:flex items-center justify-between gap-4">
           
           {/* Left: 24/7 Dispatch Availability Indicator */}
           <div className="flex items-center gap-3">
-            <span className="w-8 h-8 rounded-lg bg-amber-400 text-neutral-950 font-extrabold flex items-center justify-center font-heading text-base shrink-0">
+            <span className="w-8 h-8 rounded-xl bg-amber-400 text-neutral-950 font-extrabold flex items-center justify-center font-heading text-base shrink-0 shadow-md shadow-amber-400/20">
               C
             </span>
             <div>
@@ -72,12 +72,12 @@ export const StickyBottomCta: React.FC<StickyBottomCtaProps> = ({ onOpenBookingM
             </div>
           </div>
 
-          {/* Right: Web-Friendly High Contrast CTA Buttons */}
+          {/* Right: High Contrast Action Buttons */}
           <div className="flex items-center gap-2.5 shrink-0">
             <button
               type="button"
               onClick={handleQuickBook}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-neutral-200 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-neutral-200 bg-[#1a1f2b] hover:bg-[#252c3c] border border-[#2d3648] transition-colors"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               <span>Quick Booking Form</span>

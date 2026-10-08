@@ -1,210 +1,205 @@
 import React from 'react';
-import { Phone, MessageSquare, MapPin, Clock, ShieldCheck, FileText, RefreshCw, Shield } from 'lucide-react';
-import { PHONE_NUMBER, DISPLAY_PHONE, WHATSAPP_URL } from '../data/taxiData';
-import { PolicyType } from './PolicyModal';
 
 interface FooterProps {
-  onOpenPolicy: (type: PolicyType) => void;
+  onOpenPage: (pageKey: string) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenPolicy }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenPage }) => {
   return (
-    <footer className="bg-neutral-950 border-t border-neutral-800 text-neutral-400 text-xs py-12 pb-28 sm:pb-24 lg:pb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
-          
-          {/* Brand & About */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="w-8 h-8 rounded-lg bg-amber-400 text-neutral-950 font-extrabold flex items-center justify-center font-heading text-lg">
-                C
-              </span>
-              <span className="font-heading font-extrabold text-xl text-white tracking-tight">
-                C Taxi
-              </span>
-            </div>
-            <p className="text-neutral-400 leading-relaxed text-xs">
-              Coimbatore's dependable 24/7 call taxi service. Clean AC Prime Sedans, 6-Seater Family SUVs, and Premium Innova Crystas for local rides, Ooty hill tours, hourly rentals, and prompt CJB airport transfers.
-            </p>
-            <div className="flex items-center gap-2 text-emerald-400 font-medium">
-              <Clock className="w-4 h-4" />
-              <span>Available 24 Hours · 365 Days a Year</span>
-            </div>
-          </div>
-
-          {/* Quick Service Links */}
-          <div className="space-y-3">
-            <div className="font-bold text-white uppercase tracking-wider text-xs font-heading">
-              Our Core Services
-            </div>
-            <ul className="space-y-2">
-              <li>
-                <a href="#fare-calculator" className="hover:text-amber-400 transition-colors">
-                  Local City Rides (Sedan Base ₹100 + ₹28/km)
-                </a>
-              </li>
-              <li>
-                <a href="#popular-routes" className="hover:text-amber-400 transition-colors">
-                  Ooty Hill Station Tour (From ₹3,000)
-                </a>
-              </li>
-              <li>
-                <a href="#fare-calculator" className="hover:text-amber-400 transition-colors">
-                  Outstation Trips (Sedan ₹15/km, SUV ₹20/km)
-                </a>
-              </li>
-              <li>
-                <a href="#fare-calculator" className="hover:text-amber-400 transition-colors">
-                  Hourly City Rentals (₹375/hr for first 3 hrs)
-                </a>
-              </li>
-              <li>
-                <a href="#fare-calculator" className="hover:text-amber-400 transition-colors">
-                  Coimbatore Airport (CJB) Pickup & Drop
-                </a>
-              </li>
-              <li>
-                <a href="#fleet-rates" className="hover:text-amber-400 transition-colors">
-                  Innova Crysta & Ertiga SUV Fleet
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Legal & Policy Center (Google Ads Mandatory Compliance) */}
-          <div className="space-y-3">
-            <div className="font-bold text-white uppercase tracking-wider text-xs font-heading">
-              Customer Policy & Terms
-            </div>
-            <ul className="space-y-2">
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onOpenPolicy('privacy')}
-                  className="hover:text-amber-400 transition-colors flex items-center gap-1.5 text-left"
-                >
-                  <Shield className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Privacy Policy (Data Protection)</span>
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onOpenPolicy('cancellation')}
-                  className="hover:text-amber-400 transition-colors flex items-center gap-1.5 text-left"
-                >
-                  <RefreshCw className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Cancellation & Refund Policy</span>
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onOpenPolicy('terms')}
-                  className="hover:text-amber-400 transition-colors flex items-center gap-1.5 text-left"
-                >
-                  <FileText className="w-3.5 h-3.5 text-neutral-400" />
-                  <span>Terms & Conditions of Service</span>
-                </button>
-              </li>
-              <li className="pt-2">
-                <a
-                  href="/sitemap.xml"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-amber-400 transition-colors text-neutral-400 inline-flex items-center gap-1"
-                >
-                  <span>Sitemap XML (Search Index)</span>
-                  <span className="text-[10px] text-amber-400 font-mono">↗</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/robots.txt"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-amber-400 transition-colors text-neutral-500 inline-flex items-center gap-1"
-                >
-                  <span>Robots.txt Indexing Directive</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Direct Contact & Dispatch */}
-          <div className="space-y-4">
-            <div className="font-bold text-white uppercase tracking-wider text-xs font-heading">
-              24/7 Booking Helpline
-            </div>
-            
-            <div className="p-4 rounded-xl bg-neutral-900 border border-neutral-800 space-y-2.5">
-              <a
-                href={`tel:${PHONE_NUMBER}`}
-                className="flex items-center gap-2 text-amber-400 hover:text-amber-300 font-bold text-sm tracking-wide"
+    <footer className="site-footer" id="contact">
+      <div className="container">
+        <div className="footer-4-col">
+          {/* Column 1: Brand Info */}
+          <div>
+            <a
+              href="/"
+              className="brand-logo"
+              style={{ color: '#ffffff', marginBottom: '16px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}
+            >
+              <div
+                style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '10px',
+                  background: 'var(--brand-red)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 900,
+                  fontSize: '1.2rem',
+                  color: '#fff'
+                }}
               >
-                <Phone className="w-4 h-4" />
-                <span>{DISPLAY_PHONE}</span>
-              </a>
-
-              <a
-                href={`${WHATSAPP_URL}?text=Hello%20C%20Taxi`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 text-xs font-semibold"
-              >
-                <MessageSquare className="w-4 h-4" />
-                <span>Chat on WhatsApp (9089223344)</span>
-              </a>
-
-              <div className="flex items-start gap-2 text-[11px] text-neutral-400 pt-1 border-t border-neutral-800">
-                <MapPin className="w-3.5 h-3.5 text-neutral-500 shrink-0 mt-0.5" />
-                <span>Main Desk: Avinashi Road, Peelamedu & Gandhipuram, Coimbatore, Tamil Nadu 641004</span>
+                🚖
               </div>
-            </div>
-
-            <div className="flex items-center gap-2 text-[11px] text-neutral-400">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Registered Taxi & Chauffeur Services</span>
-            </div>
+              <span style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '-0.5px' }}>
+                C <span style={{ color: 'var(--brand-yellow)' }}>TAXI</span>
+              </span>
+            </a>
+            <p style={{ marginTop: '14px', lineHeight: 1.7, color: '#94a3b8', fontSize: '0.9rem' }}>
+              C Taxi is Coimbatore’s premier 24/7 call taxi service offering Local City Rides, Oneway Intercity Cabs, Outstation Tours, and Hourly Rental Packages with zero surge and guaranteed on-time pickup.
+            </p>
+            <p style={{ marginTop: '8px', color: '#cbd5e1', fontSize: '0.85rem' }}>
+              Official Domain: <strong style={{ color: 'var(--brand-yellow)' }}>Ctaxi.co.in</strong>
+            </p>
           </div>
 
+          {/* Column 2: Booking Types */}
+          <div className="footer-col">
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff', marginBottom: '16px' }}>
+              Booking Types
+            </h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <li>
+                <a href="#booking-form-section" style={{ color: '#94a3b8', textDecoration: 'none' }}>
+                  Local City Rides
+                </a>
+              </li>
+              <li>
+                <a href="#booking-form-section" style={{ color: '#94a3b8', textDecoration: 'none' }}>
+                  Oneway Drop Cabs
+                </a>
+              </li>
+              <li>
+                <a href="#booking-form-section" style={{ color: '#94a3b8', textDecoration: 'none' }}>
+                  Outstation Round Trips
+                </a>
+              </li>
+              <li>
+                <a href="#booking-form-section" style={{ color: '#94a3b8', textDecoration: 'none' }}>
+                  Hourly Rental Packages
+                </a>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onOpenPage('tariff')}
+                  style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: 0, textAlign: 'left' }}
+                >
+                  Official Tariff Card
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Popular Routes */}
+          <div className="footer-col">
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff', marginBottom: '16px' }}>
+              Popular Routes
+            </h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <li>
+                <a href="#booking-form-section" style={{ color: '#94a3b8', textDecoration: 'none' }}>
+                  Coimbatore ➔ Ooty (₹3,500)
+                </a>
+              </li>
+              <li>
+                <a href="#booking-form-section" style={{ color: '#94a3b8', textDecoration: 'none' }}>
+                  Coimbatore ➔ Pollachi (₹1,600)
+                </a>
+              </li>
+              <li>
+                <a href="#booking-form-section" style={{ color: '#94a3b8', textDecoration: 'none' }}>
+                  Coimbatore ➔ Palani (₹3,900)
+                </a>
+              </li>
+              <li>
+                <a href="#booking-form-section" style={{ color: '#94a3b8', textDecoration: 'none' }}>
+                  Coimbatore ➔ Tiruppur (₹1,900)
+                </a>
+              </li>
+              <li>
+                <a href="#booking-form-section" style={{ color: '#94a3b8', textDecoration: 'none' }}>
+                  Coimbatore ➔ Erode (₹3,500)
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Contact C Taxi */}
+          <div className="footer-col">
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff', marginBottom: '16px' }}>
+              Contact C Taxi
+            </h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', color: '#94a3b8', fontSize: '0.9rem' }}>
+              <li>
+                📞 Phone:{' '}
+                <a href="tel:+919089223344" style={{ color: 'var(--brand-yellow)', fontWeight: 700, textDecoration: 'none' }}>
+                  9089223344
+                </a>
+              </li>
+              <li>
+                💬 WhatsApp:{' '}
+                <a href="https://wa.me/919089223344" target="_blank" rel="noopener noreferrer" style={{ color: '#4ade80', fontWeight: 700, textDecoration: 'none' }}>
+                  9089223344
+                </a>
+              </li>
+              <li>
+                ✉️ Email:{' '}
+                <a href="mailto:booking@ctaxi.co.in" style={{ color: '#e2e8f0', textDecoration: 'none' }}>
+                  booking@ctaxi.co.in
+                </a>
+              </li>
+              <li>
+                📍 Address:{' '}
+                <span>Main Road, Gandhipuram & Avinashi Road, Peelamedu, Coimbatore - 641004</span>
+              </li>
+              <li>
+                🕒 Operational Hours: <strong style={{ color: '#4ade80' }}>24 Hours / 7 Days</strong>
+              </li>
+            </ul>
+          </div>
         </div>
 
-        {/* Bottom copyright & attribution */}
-        <div className="pt-8 border-t border-neutral-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-neutral-400">
+        {/* Bottom Bar */}
+        <div
+          style={{
+            marginTop: '36px',
+            paddingTop: '20px',
+            borderTop: '1px solid #1e293b',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '12px',
+            fontSize: '0.85rem',
+            color: '#64748b'
+          }}
+        >
           <div>
-            © {new Date().getFullYear()} C Taxi. All rights reserved.
+            © {new Date().getFullYear()} C Taxi (<strong>Ctaxi.co.in</strong>). All rights reserved.
           </div>
-          <div className="flex items-center gap-4 flex-wrap">
+          <div style={{ display: 'flex', gap: '16px' }}>
             <button
               type="button"
-              onClick={() => onOpenPolicy('privacy')}
-              className="hover:underline text-neutral-300"
+              onClick={() => onOpenPage('privacy-policy')}
+              style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: 0 }}
             >
               Privacy Policy
             </button>
-            <span>·</span>
             <button
               type="button"
-              onClick={() => onOpenPolicy('cancellation')}
-              className="hover:underline text-neutral-300"
+              onClick={() => onOpenPage('terms-conditions')}
+              style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: 0 }}
+            >
+              Terms & Conditions
+            </button>
+            <button
+              type="button"
+              onClick={() => onOpenPage('cancellation-policy')}
+              style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: 0 }}
             >
               Cancellation Policy
             </button>
-            <span>·</span>
             <button
               type="button"
-              onClick={() => onOpenPolicy('terms')}
-              className="hover:underline text-neutral-300"
+              onClick={() => onOpenPage('tariff')}
+              style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: 0 }}
             >
-              Terms
+              Tariff Card
             </button>
-            <span>·</span>
-            <span>24/7 Dispatch: {DISPLAY_PHONE}</span>
           </div>
         </div>
-
       </div>
     </footer>
   );

@@ -1,87 +1,101 @@
 import React from 'react';
-import { Clock, MapPin, ArrowRight, Shield, Sparkles, Mountain } from 'lucide-react';
-import { POPULAR_ROUTES, WHATSAPP_URL, PHONE_NUMBER } from '../data/taxiData';
+import { Route, Clock, ArrowRight, ShieldCheck, Mountain, Plane, Sparkles, Building2 } from 'lucide-react';
+import { POPULAR_ROUTES, PopularRoute, PHONE_NUMBER, DISPLAY_PHONE, WHATSAPP_URL } from '../data/taxiData';
 
-interface PopularRoutesProps {
-  onSelectRoute: (route: any) => void;
+interface PopularRoutesSectionProps {
+  onSelectRoute: (route: PopularRoute) => void;
 }
 
-export const PopularRoutesSection: React.FC<PopularRoutesProps> = ({ onSelectRoute }) => {
+export const PopularRoutesSection: React.FC<PopularRoutesSectionProps> = ({ onSelectRoute }) => {
   return (
-    <section id="popular-routes" className="py-16 sm:py-24 bg-neutral-900/50 border-b border-neutral-800">
+    <section id="popular-routes" className="py-16 sm:py-24 bg-[#0d0f12] border-b border-[#232936]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="max-w-3xl mb-12 space-y-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
-            Transparent Pricing Matrix
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white font-heading tracking-tight" style={{ textWrap: 'balance' }}>
-            Popular Outstation & Airport Routes from Coimbatore
-          </h2>
-          <p className="text-neutral-400 text-sm sm:text-base">
-            Ooty trips from ₹3,000. All routes driven by experienced commercial chauffeurs with clean AC Sedans and SUVs.
-          </p>
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <div className="max-w-2xl space-y-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              Outstation & Intercity Tariffs
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white font-heading tracking-tight" style={{ textWrap: 'balance' }}>
+              Popular Taxi Routes from Coimbatore
+            </h2>
+            <p className="text-neutral-400 text-sm sm:text-base">
+              Transparent fixed fares for top hill resorts, temple pilgrimages, and neighboring industrial corridors. Zero hidden surprises.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <a
+              href={`tel:${PHONE_NUMBER}`}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1c222e] border border-[#2e3748] text-white hover:text-amber-400 text-xs font-bold transition-colors"
+            >
+              <span>Custom Route Inquiry: {DISPLAY_PHONE}</span>
+            </a>
+          </div>
         </div>
 
-        {/* Route Cards Grid */}
+        {/* Routes Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {POPULAR_ROUTES.map((route) => {
+            const isOoty = route.to.toLowerCase().includes('ooty');
             return (
               <div
                 key={route.id}
-                className="bg-neutral-900 border border-neutral-800 hover:border-amber-400/50 rounded-2xl p-6 transition-all duration-200 flex flex-col justify-between group shadow-lg"
+                className="bg-[#151922] border border-[#272f3d] rounded-2xl p-6 flex flex-col justify-between hover:border-amber-400/40 transition-all duration-200 shadow-xl group"
               >
                 <div>
                   
-                  {/* Top route badge and distance */}
-                  <div className="flex items-center justify-between text-xs text-neutral-400 mb-4 pb-3 border-b border-neutral-800">
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-neutral-400" />
-                      {route.estDuration}
+                  {/* Category Header */}
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-semibold text-neutral-400 flex items-center gap-1.5">
+                      {route.category === 'hills' && <Mountain className="w-3.5 h-3.5 text-amber-400" />}
+                      {route.category === 'airport' && <Plane className="w-3.5 h-3.5 text-emerald-400" />}
+                      {route.category === 'spiritual' && <Sparkles className="w-3.5 h-3.5 text-amber-400" />}
+                      {route.category === 'business' && <Building2 className="w-3.5 h-3.5 text-neutral-400" />}
+                      <span className="capitalize">{route.category} Route</span>
                     </span>
-                    <span className="font-mono text-neutral-300 font-semibold tabular-nums">
-                      ~{route.distanceKm} km
+
+                    <span className="text-[11px] font-mono text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/30">
+                      ~{route.estDuration}
                     </span>
                   </div>
 
-                  {/* Route From -> To */}
-                  <div className="space-y-1.5 mb-4">
-                    <div className="text-xs text-neutral-400 flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                      Pickup: <strong className="text-neutral-200">{route.from}</strong>
+                  {/* Route Title */}
+                  <div className="mb-3">
+                    <div className="text-xs text-neutral-400 font-medium">
+                      {route.from} →
                     </div>
-                    <div className="text-base sm:text-lg font-bold text-white flex items-center gap-1.5 group-hover:text-amber-300 transition-colors">
-                      <MapPin className="w-4 h-4 text-amber-400 shrink-0" />
-                      <span>{route.to}</span>
-                    </div>
+                    <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-amber-300 transition-colors font-heading">
+                      {route.to}
+                    </h3>
                   </div>
 
-                  {/* Highlight pill & description */}
-                  <div className="text-xs text-amber-400/90 font-medium mb-2 flex items-center gap-1.5">
-                    {route.isHillStation ? (
-                      <Mountain className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                    ) : (
-                      <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                    )}
-                    <span>{route.highlight}</span>
+                  {/* Highlight pill */}
+                  <div className="mb-4">
+                    <span className="text-[11px] text-amber-300/90 font-medium bg-amber-400/10 px-2.5 py-1 rounded-md border border-amber-400/20 inline-block">
+                      ✓ {route.highlight}
+                    </span>
                   </div>
 
-                  <p className="text-xs text-neutral-400 leading-relaxed mb-4">
+                  <p className="text-xs text-neutral-400 leading-relaxed mb-6">
                     {route.popularFor}
                   </p>
 
                 </div>
 
-                {/* Price & Book Action */}
-                <div className="pt-4 border-t border-neutral-800 flex items-center justify-between">
+                {/* Card Bottom Area */}
+                <div className="pt-4 border-t border-[#232936] flex items-center justify-between gap-3">
                   <div>
-                    <div className="text-[10px] uppercase font-bold tracking-wider text-neutral-400">
+                    <span className="text-[10px] text-neutral-400 uppercase tracking-wider block">
                       Starting Fare
-                    </div>
-                    <div className="text-xl font-extrabold text-amber-400 font-heading tabular-nums">
+                    </span>
+                    <span className="text-2xl font-extrabold text-amber-400 font-heading tabular-nums">
                       ₹{route.startingPrice.toLocaleString('en-IN')}
-                    </div>
+                    </span>
+                    <span className="text-[10px] text-neutral-400 block">
+                      {isOoty ? 'AC Sedan Package' : `~${route.distanceKm} km`}
+                    </span>
                   </div>
 
                   <button
@@ -91,7 +105,7 @@ export const PopularRoutesSection: React.FC<PopularRoutesProps> = ({ onSelectRou
                       const el = document.getElementById('fare-calculator');
                       if (el) el.scrollIntoView({ behavior: 'smooth' });
                     }}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-neutral-950 bg-amber-400 hover:bg-amber-300 transition-colors shadow-sm"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl font-bold text-xs text-neutral-950 bg-amber-400 hover:bg-amber-300 transition-all shadow-md active:scale-95"
                   >
                     <span>Book Route</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -101,22 +115,6 @@ export const PopularRoutesSection: React.FC<PopularRoutesProps> = ({ onSelectRou
               </div>
             );
           })}
-        </div>
-
-        {/* Footnote on Tolls & Permits */}
-        <div className="mt-8 p-4 rounded-xl bg-neutral-950 border border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-neutral-400">
-          <div className="flex items-center gap-2">
-            <Shield className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>
-              All prices include driver allowance (₹500/day for outstation), fuel & AC. Toll plaza charges & parking tickets are charged as per official slips.
-            </span>
-          </div>
-          <a
-            href={`tel:${PHONE_NUMBER}`}
-            className="text-amber-400 hover:text-amber-300 font-semibold whitespace-nowrap"
-          >
-            Custom Route Quote? Call 9089223344 →
-          </a>
         </div>
 
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, Phone, MessageSquare, Car, MapPin, Calendar, Clock, ArrowRight } from 'lucide-react';
 import { PHONE_NUMBER, DISPLAY_PHONE, WHATSAPP_URL } from '../data/taxiData';
 
@@ -15,6 +15,17 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, boo
   const [specialNotes, setSpecialNotes] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  // Keyboard Escape listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -36,22 +47,22 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, boo
     `• Drop: ${bookingDetails?.drop || 'Destination'}\n` +
     `• Vehicle: ${bookingDetails?.vehicle || 'AC Sedan'}\n` +
     `• Date & Time: ${bookingDetails?.date || 'Today'} at ${bookingDetails?.time || 'Immediate'}\n` +
-    `• Estimated Fare: ~₹${bookingDetails?.estimatedPrice?.toLocaleString('en-IN') || 'Quote'}\n` +
+    `• Estimated Fare: ~${bookingDetails?.estimatedPriceRange || (bookingDetails?.estimatedPrice ? `₹${bookingDetails.estimatedPrice.toLocaleString('en-IN')}` : 'Standard Quote')}\n` +
     `• Notes: ${specialNotes || 'None'}\n\nPlease dispatch cab & confirm driver details.`
   );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-950/80 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
       <div 
-        className="relative w-full max-w-lg bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden text-neutral-100"
+        className="relative w-full max-w-lg bg-[#141722] border border-[#272f3f] rounded-2xl shadow-2xl overflow-hidden text-neutral-100"
         role="dialog"
         aria-modal="true"
       >
         
         {/* Modal Top Bar */}
-        <div className="flex items-center justify-between p-4 sm:p-5 border-b border-neutral-800 bg-neutral-950">
-          <div className="flex items-center gap-2">
-            <span className="w-8 h-8 rounded-lg bg-amber-400 text-neutral-950 font-extrabold flex items-center justify-center font-heading text-lg">
+        <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#232936] bg-[#10131b]">
+          <div className="flex items-center gap-2.5">
+            <span className="w-8 h-8 rounded-xl bg-amber-400 text-neutral-950 font-extrabold flex items-center justify-center font-heading text-lg shadow-md shadow-amber-400/20">
               C
             </span>
             <div>
@@ -59,7 +70,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, boo
                 Confirm C Taxi Booking
               </h3>
               <p className="text-[11px] text-neutral-400">
-                15-Min Doorstep Dispatch across Coimbatore
+                15-Min Doorstep Dispatch · 24/7 Kovai Helpline
               </p>
             </div>
           </div>
@@ -67,133 +78,151 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, boo
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"
+            className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-[#1d2330] transition-colors"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Modal Body */}
-        <div className="p-5 sm:p-6 space-y-5 max-h-[85vh] overflow-y-auto">
+        {/* Modal Content */}
+        <div className="p-5 sm:p-6 space-y-4">
           
           {isSubmitted ? (
-            <div className="text-center py-6 space-y-4">
-              <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-10 h-10" />
+            /* Success State */
+            <div className="py-6 text-center space-y-4 animate-in fade-in zoom-in-95 duration-200">
+              <div className="w-14 h-14 rounded-full bg-emerald-400/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-8 h-8" />
               </div>
 
-              <div>
-                <h4 className="text-xl font-bold text-white font-heading">Booking Request Received!</h4>
-                <p className="text-xs sm:text-sm text-neutral-300 mt-2 max-w-sm mx-auto leading-relaxed">
-                  Thank you, <strong>{customerName || 'Customer'}</strong>. Our Coimbatore dispatch team has received your booking for{' '}
-                  <strong>{bookingDetails?.vehicle || 'your cab'}</strong>.
-                </p>
-                <p className="text-xs text-amber-400 mt-1 font-semibold">
-                  Driver details will be sent to {customerPhone} via SMS & WhatsApp within 2–5 minutes.
+              <div className="space-y-1">
+                <h4 className="text-xl font-bold text-white font-heading">
+                  Booking Request Received!
+                </h4>
+                <p className="text-xs sm:text-sm text-neutral-300 max-w-sm mx-auto">
+                  Our Coimbatore dispatch desk is assigning a nearby driver for <strong className="text-white">{customerPhone}</strong>.
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-neutral-800 flex flex-col gap-2.5">
+              {/* Trip Summary Card */}
+              <div className="p-4 rounded-xl bg-[#10131b] border border-[#232936] text-left text-xs space-y-2 max-w-sm mx-auto">
+                <div className="flex justify-between">
+                  <span className="text-neutral-400">Pickup:</span>
+                  <span className="font-semibold text-white truncate max-w-[200px]">
+                    {pickupAddress || bookingDetails?.pickup || 'Coimbatore'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-neutral-400">Drop:</span>
+                  <span className="font-semibold text-white truncate max-w-[200px]">
+                    {bookingDetails?.drop || 'Destination'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-neutral-400">Vehicle:</span>
+                  <span className="text-amber-400 font-bold">
+                    {bookingDetails?.vehicle || 'AC Sedan'}
+                  </span>
+                </div>
+                {bookingDetails?.estimatedPrice && (
+                  <div className="flex justify-between pt-1 border-t border-[#1e2430]">
+                    <span className="text-neutral-400">Estimated Fare:</span>
+                    <span className="text-emerald-400 font-extrabold text-sm">
+                      ~₹{bookingDetails.estimatedPrice.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Faster WhatsApp Option */}
+              <div className="pt-2 space-y-2">
                 <a
                   href={`${WHATSAPP_URL}?text=${formattedWhatsAppText}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm text-neutral-950 bg-emerald-400 hover:bg-emerald-300 transition-all shadow-md shadow-emerald-400/20"
+                  className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm text-neutral-950 bg-emerald-400 hover:bg-emerald-300 transition-all shadow-lg shadow-emerald-400/20"
                 >
                   <MessageSquare className="w-4 h-4 fill-neutral-950" />
-                  <span>Send Direct WhatsApp Confirmation</span>
-                </a>
-
-                <a
-                  href={`tel:${PHONE_NUMBER}`}
-                  className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-xs text-neutral-200 bg-neutral-800 hover:bg-neutral-700 transition-colors"
-                >
-                  <Phone className="w-4 h-4 text-amber-400" />
-                  <span>Need Immediate Cab? Call Dispatch ({DISPLAY_PHONE})</span>
+                  <span>Receive Driver Details on WhatsApp</span>
                 </a>
 
                 <button
                   type="button"
                   onClick={onClose}
-                  className="text-xs text-neutral-400 hover:text-white pt-2"
+                  className="text-xs text-neutral-400 hover:text-white underline block mx-auto pt-1"
                 >
-                  Close Window
+                  Close & Return to Page
                 </button>
               </div>
             </div>
           ) : (
+            /* Booking Form */
             <form onSubmit={handleSubmit} className="space-y-4">
               
-              {/* Ride Summary Quick Snippet */}
+              {/* Selected Trip Quick Strip */}
               {bookingDetails && (
-                <div className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800 text-xs space-y-1.5">
-                  <div className="flex justify-between items-center text-neutral-300">
-                    <span className="flex items-center gap-1.5 text-neutral-400">
-                      <Car className="w-3.5 h-3.5 text-amber-400" /> Vehicle:
-                    </span>
-                    <strong className="text-white">{bookingDetails.vehicle}</strong>
-                  </div>
-                  <div className="flex justify-between items-center text-neutral-300">
-                    <span className="flex items-center gap-1.5 text-neutral-400">
-                      <MapPin className="w-3.5 h-3.5 text-amber-400" /> Route:
-                    </span>
-                    <span className="truncate max-w-[200px] text-right text-neutral-200">
-                      {bookingDetails.pickup} → {bookingDetails.drop}
+                <div className="p-3.5 rounded-xl bg-[#10131b] border border-[#232936] text-xs space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-neutral-400">Service:</span>
+                    <span className="font-bold text-amber-400 capitalize">
+                      {bookingDetails.serviceType === 'local' ? 'Local City Ride' : bookingDetails.serviceType === 'outstation' ? 'Outstation Trip' : bookingDetails.serviceType === 'hourly' ? 'Hourly Rental' : 'Airport Transfer'}
                     </span>
                   </div>
-                  {bookingDetails.estimatedPrice && (
-                    <div className="flex justify-between items-center pt-1.5 border-t border-neutral-900">
-                      <span className="text-neutral-400">Estimated Fare:</span>
-                      <strong className="text-amber-400 font-mono text-sm tabular-nums">
-                        ₹{bookingDetails.estimatedPrice.toLocaleString('en-IN')}
-                      </strong>
-                    </div>
-                  )}
+                  <div className="flex items-center justify-between">
+                    <span className="text-neutral-400">Vehicle:</span>
+                    <span className="font-semibold text-white">
+                      {bookingDetails.vehicle}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-neutral-400">Estimated Quote:</span>
+                    <span className="font-extrabold text-emerald-400 text-sm">
+                      {bookingDetails.estimatedPriceRange || (bookingDetails.estimatedPrice ? `~₹${bookingDetails.estimatedPrice.toLocaleString('en-IN')}` : 'Standard Meter Quote')}
+                    </span>
+                  </div>
                 </div>
               )}
 
+              {/* Error Warning */}
               {errorMessage && (
-                <div className="p-3 rounded-lg bg-red-950/60 border border-red-500/40 text-red-200 text-xs">
+                <div className="p-2.5 rounded-lg bg-red-950/60 border border-red-500/40 text-red-300 text-xs font-semibold">
                   {errorMessage}
                 </div>
               )}
 
-              {/* Passenger Name */}
+              {/* Customer Phone (Required) */}
               <div>
                 <label className="block text-xs font-semibold text-neutral-300 mb-1">
-                  Your Full Name
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value)}
-                  placeholder="e.g. Rajesh Kumar"
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-1 focus:ring-amber-400"
-                />
-              </div>
-
-              {/* Mobile Number */}
-              <div>
-                <label className="block text-xs font-semibold text-neutral-300 mb-1 flex items-center justify-between">
-                  <span>Mobile Number for Driver Coordination</span>
-                  <span className="text-[11px] text-amber-400">Required</span>
+                  Mobile Number <span className="text-amber-400">*</span> (For Driver Coordination)
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-neutral-400">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xs sm:text-sm font-semibold">
                     +91
                   </span>
                   <input
                     type="tel"
                     required
-                    value={customerPhone}
-                    onChange={(e) => setCustomerPhone(e.target.value)}
-                    placeholder="98765 43210"
                     maxLength={10}
-                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg pl-12 pr-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-1 focus:ring-amber-400 font-mono"
+                    value={customerPhone}
+                    onChange={(e) => setCustomerPhone(e.target.value.replace(/\D/g, ''))}
+                    placeholder="90892 23344"
+                    className="w-full bg-[#181d28] border border-[#2d3648] rounded-xl pl-12 pr-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-1 focus:ring-amber-400"
                   />
                 </div>
+              </div>
+
+              {/* Customer Name */}
+              <div>
+                <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                  Your Name (Optional)
+                </label>
+                <input
+                  type="text"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  placeholder="e.g. Ramesh Kumar"
+                  className="w-full bg-[#181d28] border border-[#2d3648] rounded-xl px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-1 focus:ring-amber-400"
+                />
               </div>
 
               {/* Exact Pickup Address */}
@@ -206,7 +235,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, boo
                   value={pickupAddress}
                   onChange={(e) => setPickupAddress(e.target.value)}
                   placeholder="e.g. Near PSG Tech / DB Road / Railway Station Gate 2"
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-1 focus:ring-amber-400"
+                  className="w-full bg-[#181d28] border border-[#2d3648] rounded-xl px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-1 focus:ring-amber-400"
                 />
               </div>
 
@@ -219,8 +248,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, boo
                   rows={2}
                   value={specialNotes}
                   onChange={(e) => setSpecialNotes(e.target.value)}
-                  placeholder="e.g. Indigo Flight 6E-241 arriving at 3:15 PM, 3 heavy suitcases"
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:ring-1 focus:ring-amber-400"
+                  placeholder="e.g. Indigo Flight arriving at 3:15 PM, 3 heavy suitcases"
+                  className="w-full bg-[#181d28] border border-[#2d3648] rounded-xl px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:ring-1 focus:ring-amber-400"
                 />
               </div>
 

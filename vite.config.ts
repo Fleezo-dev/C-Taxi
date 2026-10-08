@@ -26,12 +26,38 @@ export default defineConfig(() => {
               // Silently ignore if filesystem restricts
             }
           }
+          const publicAssetsPath = path.resolve(rootDir, 'public/assets');
+          const distAssetsPath = path.resolve(distPath, 'assets');
+          if (fs.existsSync(publicAssetsPath)) {
+            try {
+              fs.cpSync(publicAssetsPath, distAssetsPath, { recursive: true });
+            } catch {
+              // Silently ignore
+            }
+          }
         },
       },
     ],
     resolve: {
       alias: {
         '@': rootDir,
+      },
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id: string) {
+            if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+              return 'vendor-react';
+            }
+            if (id.includes('node_modules/leaflet')) {
+              return 'vendor-leaflet';
+            }
+            if (id.includes('node_modules/lucide-react')) {
+              return 'vendor-icons';
+            }
+          },
+        },
       },
     },
     server: {

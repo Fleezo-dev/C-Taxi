@@ -4,7 +4,7 @@ import { COIMBATORE_LOCALITIES, TESTIMONIALS, PHONE_NUMBER, DISPLAY_PHONE } from
 
 export const TrustProofSection: React.FC = () => {
   return (
-    <section id="why-c-taxi" className="py-16 sm:py-24 bg-neutral-900/40 border-b border-neutral-800">
+    <section id="why-c-taxi" className="py-16 sm:py-24 bg-[#101319] border-b border-[#232936]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -13,53 +13,53 @@ export const TrustProofSection: React.FC = () => {
             Coimbatore's Trusted Mobility Partner
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white font-heading tracking-tight" style={{ textWrap: 'balance' }}>
-            Why Coimbatore Commuters & Travelers Rely on C Taxi
+            Why Commuters & Travelers Choose C Taxi
           </h2>
           <p className="text-neutral-400 text-sm sm:text-base">
-            No algorithm cancellations, no surge shocks during rain, and no untraceable drivers. Real human dispatch with dependable accountability.
+            No algorithm cancellations, zero surge shocks during rain, and verified professional drivers. Real human dispatch with dependable accountability.
           </p>
         </div>
 
         {/* 3 Core Guarantees Bento */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           
-          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 relative overflow-hidden">
+          <div className="bg-[#151922] border border-[#272f3d] rounded-2xl p-6 relative overflow-hidden shadow-xl">
             <div className="w-12 h-12 rounded-xl bg-amber-400/10 border border-amber-400/20 text-amber-400 flex items-center justify-center mb-5">
               <Clock className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-2">15-Minute Doorstep Dispatch</h3>
+            <h3 className="text-lg font-bold text-white mb-2 font-heading">15-Minute Doorstep Dispatch</h3>
             <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-              With cabs stationed across Gandhipuram, RS Puram, Peelamedu, and Saravanampatti, your driver arrives within 15 minutes of confirmation.
+              With cabs stationed across Gandhipuram, RS Puram, Peelamedu, and Saravanampatti, your driver arrives within 15 minutes of booking confirmation.
             </p>
-            <div className="mt-4 pt-4 border-t border-neutral-800 flex items-center gap-2 text-xs text-emerald-400">
+            <div className="mt-4 pt-4 border-t border-[#232936] flex items-center gap-2 text-xs text-emerald-400">
               <CheckCircle2 className="w-4 h-4" />
               <span>Coimbatore-wide GPS tracking</span>
             </div>
           </div>
 
-          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 relative overflow-hidden">
+          <div className="bg-[#151922] border border-[#272f3d] rounded-2xl p-6 relative overflow-hidden shadow-xl">
             <div className="w-12 h-12 rounded-xl bg-amber-400/10 border border-amber-400/20 text-amber-400 flex items-center justify-center mb-5">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-2">Verified Chauffeurs & Safety</h3>
+            <h3 className="text-lg font-bold text-white mb-2 font-heading">Verified Chauffeurs & Safety</h3>
             <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-              Every driver undergoes complete police verification, alcohol breathalyzer protocols, and certified mountain road navigation training.
+              Every driver undergoes complete background checks, professional driving license verification, and mountain road navigation training.
             </p>
-            <div className="mt-4 pt-4 border-t border-neutral-800 flex items-center gap-2 text-xs text-emerald-400">
+            <div className="mt-4 pt-4 border-t border-[#232936] flex items-center gap-2 text-xs text-emerald-400">
               <CheckCircle2 className="w-4 h-4" />
-              <span>Safe for solo women & elders</span>
+              <span>Safe for families, solo women & elders</span>
             </div>
           </div>
 
-          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 relative overflow-hidden">
+          <div className="bg-[#151922] border border-[#272f3d] rounded-2xl p-6 relative overflow-hidden shadow-xl">
             <div className="w-12 h-12 rounded-xl bg-amber-400/10 border border-amber-400/20 text-amber-400 flex items-center justify-center mb-5">
               <Award className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-2">Zero Surge & Transparent Meters</h3>
+            <h3 className="text-lg font-bold text-white mb-2 font-heading">Zero Surge & Transparent Meters</h3>
             <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
               The fare quoted is the fare you pay. No sudden 2x multiplication when it rains or during festival rush at Gandhipuram bus stand.
             </p>
-            <div className="mt-4 pt-4 border-t border-neutral-800 flex items-center gap-2 text-xs text-emerald-400">
+            <div className="mt-4 pt-4 border-t border-[#232936] flex items-center gap-2 text-xs text-emerald-400">
               <CheckCircle2 className="w-4 h-4" />
               <span>Printed / WhatsApp GST bills</span>
             </div>
@@ -68,10 +68,10 @@ export const TrustProofSection: React.FC = () => {
         </div>
 
         {/* Full Coimbatore Locality Hubs Coverage */}
-        <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 sm:p-8 mb-16">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 pb-4 border-b border-neutral-800 gap-3">
+        <div className="bg-[#151922] border border-[#272f3d] rounded-2xl p-6 sm:p-8 mb-16 shadow-xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 pb-4 border-b border-[#232936] gap-3">
             <div>
-              <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+              <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2 font-heading">
                 <MapPin className="w-5 h-5 text-amber-400" />
                 Active C Taxi Pickup Hubs Across Coimbatore
               </h3>
@@ -79,7 +79,7 @@ export const TrustProofSection: React.FC = () => {
                 Drivers strategically positioned in key residential, IT, industrial, and transit corridors
               </p>
             </div>
-            <span className="text-xs text-emerald-400 bg-emerald-950/60 px-3 py-1 rounded-md border border-emerald-500/30 font-semibold self-start sm:self-auto">
+            <span className="text-xs text-emerald-400 bg-emerald-950/80 px-3 py-1 rounded-md border border-emerald-500/30 font-semibold self-start sm:self-auto">
               24/7 Rapid Response Zone
             </span>
           </div>
@@ -88,7 +88,7 @@ export const TrustProofSection: React.FC = () => {
             {COIMBATORE_LOCALITIES.map((loc, idx) => (
               <div 
                 key={idx}
-                className="flex items-center gap-2 p-2.5 rounded-lg bg-neutral-950 border border-neutral-800/80 text-xs text-neutral-300 hover:border-amber-400/40 transition-colors"
+                className="flex items-center gap-2 p-2.5 rounded-lg bg-[#10131a] border border-[#232936] text-xs text-neutral-300 hover:border-amber-400/40 transition-colors"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
                 <span className="truncate">{loc}</span>
@@ -101,21 +101,21 @@ export const TrustProofSection: React.FC = () => {
           </p>
         </div>
 
-        {/* Attributable Verified Reviews (Quantitative Rigor) */}
+        {/* Verified Reviews */}
         <div>
           <div className="flex items-center justify-between mb-8">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
-                Real Traveler Feedback
+                Customer Experiences
               </span>
               <h3 className="text-2xl font-bold text-white font-heading mt-1">
-                Verified Reviews from Coimbatore Travelers
+                Verified Feedback from Coimbatore Travelers
               </h3>
             </div>
 
-            <div className="hidden sm:flex items-center gap-2 text-xs font-bold text-neutral-300 bg-neutral-800 px-3 py-1.5 rounded-lg border border-neutral-700">
+            <div className="hidden sm:flex items-center gap-2 text-xs font-bold text-neutral-300 bg-[#1c222e] px-3 py-1.5 rounded-lg border border-[#2e3748]">
               <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-              <span>4.9 / 5 Rating (1,840+ Rides)</span>
+              <span>4.9 / 5 Rating</span>
             </div>
           </div>
 
@@ -123,7 +123,7 @@ export const TrustProofSection: React.FC = () => {
             {TESTIMONIALS.map((t, idx) => (
               <div
                 key={idx}
-                className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 flex flex-col justify-between shadow-md"
+                className="bg-[#151922] border border-[#272f3d] rounded-2xl p-6 flex flex-col justify-between shadow-xl"
               >
                 <div>
                   
@@ -134,7 +134,7 @@ export const TrustProofSection: React.FC = () => {
                         <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                       ))}
                     </div>
-                    <span className="text-[11px] font-medium text-neutral-400 bg-neutral-950 px-2 py-0.5 rounded border border-neutral-800">
+                    <span className="text-[11px] font-medium text-neutral-400 bg-[#10131a] px-2 py-0.5 rounded border border-[#232936]">
                       {t.trip}
                     </span>
                   </div>
@@ -145,7 +145,7 @@ export const TrustProofSection: React.FC = () => {
 
                 </div>
 
-                <div className="pt-4 border-t border-neutral-800">
+                <div className="pt-4 border-t border-[#232936]">
                   <div className="font-bold text-sm text-white">{t.name}</div>
                   <div className="text-xs text-amber-400/90 font-medium">{t.role}</div>
                   <div className="text-[11px] text-neutral-400 mt-0.5">{t.locality}</div>
