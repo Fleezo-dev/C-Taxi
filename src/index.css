@@ -357,17 +357,42 @@ img {
   font-size: 1rem;
 }
 
-/* 5. Main Header Navigation */
+/* 5. Main Header Navigation (Fixed & Semi-Transparent Traveling Bar) */
 .header-nav {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 1000;
-  background-color: #ffffff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  background-color: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 2px 14px rgba(15, 23, 42, 0.05);
   padding: 10px 0;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.75);
   min-height: 72px;
   box-sizing: border-box;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.header-nav.is-scrolled {
+  background-color: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.1);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+/* Page Root Offset for Fixed Header */
+.ctaxi-app-root {
+  padding-top: 72px;
+  min-height: 100vh;
+}
+
+/* Offset smooth scrolling for fixed header */
+section[id], div[id] {
+  scroll-margin-top: 78px;
 }
 
 .header-nav .container {
@@ -2980,6 +3005,13 @@ body {
 @media (max-width: 600px) {
   .header-nav {
     padding: 8px 0;
+    min-height: 58px;
+  }
+  .ctaxi-app-root {
+    padding-top: 58px;
+  }
+  section[id], div[id] {
+    scroll-margin-top: 66px;
   }
   .header-nav .container {
     padding: 0 12px;

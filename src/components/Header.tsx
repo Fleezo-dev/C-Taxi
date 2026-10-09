@@ -6,6 +6,16 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onOpenPage }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -41,7 +51,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenPage }) => {
 
   return (
     <>
-      <header className="header-nav">
+      <header className={`header-nav ${isScrolled ? 'is-scrolled' : ''}`}>
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
           {/* Brand Logo */}
           <a href="/" className="brand-logo" aria-label="C Taxi" style={{ textDecoration: 'none' }}>
