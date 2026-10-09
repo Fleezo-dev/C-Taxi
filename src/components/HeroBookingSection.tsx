@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   calculateLocalFare,
   calculateOnewayFare,
@@ -27,9 +27,6 @@ interface HeroBookingSectionProps {
 
 export const HeroBookingSection: React.FC<HeroBookingSectionProps> = ({ onBook }) => {
   const [activeTab, setActiveTab] = useState<'local' | 'oneway' | 'outstation' | 'hourly'>('local');
-
-  // Canvas Ref
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Form States - Local
   const [localPickup, setLocalPickup] = useState('');
@@ -78,90 +75,6 @@ export const HeroBookingSection: React.FC<HeroBookingSectionProps> = ({ onBook }
     const tomorrowStr = new Date(Date.now() + 86400000).toISOString().split('T')[0];
     setOutstationStartDate(todayStr);
     setOutstationReturnDate(tomorrowStr);
-  }, []);
-
-  // Canvas Highway Animation
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animId: number;
-    let width = (canvas.width = canvas.parentElement?.clientWidth || window.innerWidth);
-    let height = (canvas.height = canvas.parentElement?.clientHeight || 450);
-
-    const handleResize = () => {
-      if (!canvas.parentElement) return;
-      width = canvas.width = canvas.parentElement.clientWidth || window.innerWidth;
-      height = canvas.height = canvas.parentElement.clientHeight || 450;
-    };
-    window.addEventListener('resize', handleResize);
-
-    const streaks: Array<{ x: number; y: number; speed: number; color: string; length: number }> = [];
-    for (let i = 0; i < 40; i++) {
-      streaks.push({
-        x: Math.random() * 2 - 1,
-        y: Math.random(),
-        speed: Math.random() * 0.02 + 0.015,
-        color: Math.random() > 0.4 ? 'rgba(217, 4, 41, ' : Math.random() > 0.5 ? 'rgba(255, 183, 3, ' : 'rgba(255, 255, 255, ',
-        length: Math.random() * 80 + 40
-      });
-    }
-
-    const render = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      // Night sky gradient
-      const skyGrad = ctx.createLinearGradient(0, 0, 0, height);
-      skyGrad.addColorStop(0, '#0b1329');
-      skyGrad.addColorStop(0.5, '#111827');
-      skyGrad.addColorStop(1, '#080d1a');
-      ctx.fillStyle = skyGrad;
-      ctx.fillRect(0, 0, width, height);
-
-      const cx = width / 2;
-      const cy = height * 0.35;
-
-      // Perspective Road Base
-      ctx.beginPath();
-      ctx.moveTo(cx - width * 0.1, cy);
-      ctx.lineTo(cx + width * 0.1, cy);
-      ctx.lineTo(width * 1.2, height);
-      ctx.lineTo(-width * 0.2, height);
-      ctx.closePath();
-      ctx.fillStyle = '#0f172a';
-      ctx.fill();
-
-      // Highway Streaks
-      streaks.forEach(s => {
-        s.y += s.speed;
-        if (s.y > 1) {
-          s.y = 0;
-          s.x = Math.random() * 2 - 1;
-        }
-        const px = cx + s.x * (s.y * width * 0.6);
-        const py = cy + s.y * (height - cy);
-        const pLength = s.length * s.y;
-        const opacity = Math.min(s.y * 1.5, 0.9);
-
-        ctx.beginPath();
-        ctx.moveTo(px, py);
-        ctx.lineTo(px + s.x * pLength * 0.2, py + pLength);
-        ctx.strokeStyle = `${s.color}${opacity})`;
-        ctx.lineWidth = Math.max(1, s.y * 5);
-        ctx.stroke();
-      });
-
-      animId = requestAnimationFrame(render);
-    };
-
-    render();
-
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', handleResize);
-    };
   }, []);
 
   // Live Fare Calculations
@@ -289,16 +202,18 @@ export const HeroBookingSection: React.FC<HeroBookingSectionProps> = ({ onBook }
 
   return (
     <section className="hero-booking-section" id="booking-form-section" style={{ position: 'relative', overflow: 'hidden' }}>
-      {/* Background Highway Night Simulation Canvas */}
-      <canvas
-        ref={canvasRef}
-        className="hero-canvas"
+      {/* Background WebP Image with Dark Gradient Legibility Overlay */}
+      <div
+        className="hero-bg-overlay"
         style={{
           position: 'absolute',
           top: 0,
           left: 0,
           width: '100%',
           height: '100%',
+          backgroundImage: 'linear-gradient(180deg, rgba(11, 17, 30, 0.76) 0%, rgba(15, 23, 42, 0.92) 100%), url(/assets/images/hero-taxi-bg.webp)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 40%',
           zIndex: 0,
           pointerEvents: 'none'
         }}
@@ -426,8 +341,11 @@ export const HeroBookingSection: React.FC<HeroBookingSectionProps> = ({ onBook }
                     </select>
                   </div>
                   <div className="field-group" style={{ display: 'flex', alignItems: 'flex-end' }}>
-                    <button type="submit" className="btn btn-red" style={{ height: '46px', width: '100%' }}>
-                      Book Local Taxi Now
+                    <button type="submit" className="btn-modern-cta">
+                      <span>Book Local Taxi Now</span>
+                      <span className="cta-arrow" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -526,8 +444,11 @@ export const HeroBookingSection: React.FC<HeroBookingSectionProps> = ({ onBook }
                     </select>
                   </div>
                   <div className="field-group" style={{ display: 'flex', alignItems: 'flex-end' }}>
-                    <button type="submit" className="btn btn-red" style={{ height: '46px', width: '100%' }}>
-                      Book Oneway Cab
+                    <button type="submit" className="btn-modern-cta">
+                      <span>Book Oneway Cab</span>
+                      <span className="cta-arrow" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -649,8 +570,11 @@ export const HeroBookingSection: React.FC<HeroBookingSectionProps> = ({ onBook }
                     </select>
                   </div>
                   <div className="field-group" style={{ display: 'flex', alignItems: 'flex-end' }}>
-                    <button type="submit" className="btn btn-red" style={{ height: '46px', width: '100%' }}>
-                      Book Outstation Round Trip
+                    <button type="submit" className="btn-modern-cta">
+                      <span>Book Outstation Round Trip</span>
+                      <span className="cta-arrow" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -763,8 +687,11 @@ export const HeroBookingSection: React.FC<HeroBookingSectionProps> = ({ onBook }
                     />
                   </div>
                   <div className="field-group" style={{ display: 'flex', alignItems: 'flex-end' }}>
-                    <button type="submit" className="btn btn-red" style={{ height: '46px', width: '100%' }}>
-                      Book Hourly Rental
+                    <button type="submit" className="btn-modern-cta">
+                      <span>Book Hourly Rental</span>
+                      <span className="cta-arrow" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                      </span>
                     </button>
                   </div>
                 </div>

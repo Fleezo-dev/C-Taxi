@@ -9,7 +9,6 @@ import { HeroBookingSection, BookingSubmission } from './components/HeroBookingS
 import { QuickTrustStrip } from './components/QuickTrustStrip';
 import { RoutesSection } from './components/RoutesSection';
 import { FeaturesSection } from './components/FeaturesSection';
-import { TaxiComparisonSection } from './components/TaxiComparisonSection';
 import { ServicesSection } from './components/ServicesSection';
 import { CoimbatoreInfoSection } from './components/CoimbatoreInfoSection';
 import { ReviewsSection } from './components/ReviewsSection';
@@ -132,10 +131,7 @@ export default function App() {
       {/* 5. Why C Taxi / Features Grid */}
       <FeaturesSection />
 
-      {/* 6. Transparency Comparison Table */}
-      <TaxiComparisonSection />
-
-      {/* 7. Complete Taxi Solutions / Services */}
+      {/* 6. Complete Taxi Solutions / Services */}
       <ServicesSection />
 
       {/* 8. Coimbatore Coverage & Local Hubs */}
